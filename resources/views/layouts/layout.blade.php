@@ -46,7 +46,16 @@
 </nav>
 
 @yield('content')
-
+<!-- Footer -->
+<footer class="footer bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 h-100 text-center text-lg-left my-auto">
+                <h3 class="text-muted small mb-4 mb-lg-0 text-center">&copy; BookWorm 2018. All Rights Reserved.</h3>
+            </div>
+        </div>
+    </div>
+</footer>
 @if(auth::check())
     <form id="logout-form" action="/logout" method="POST" style="display: none;">@csrf</form>
     @endif
