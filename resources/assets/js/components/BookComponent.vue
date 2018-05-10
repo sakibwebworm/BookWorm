@@ -1,12 +1,12 @@
 <template>
     <div>
 
-    <header class="masthead text-white text-center">
+    <header class="masthead text-white text-center backgroundpic pt-5 pb-5">
         <div class="overlay"></div>
         <div class="container">
             <div class="row">
                 <div class="col-xl-9 mx-auto">
-                    <h1 class="mb-5">Build a landing page for your business or project and generate more leads!</h1>
+                    <h1 class="mb-5">Search and save the books you love!</h1>
                 </div>
                 <div class="col-md-10 col-lg-8 col-xl-7 mx-auto">
                     <form>
@@ -21,31 +21,26 @@
                     </form>
                 </div>
             </div>
-        </div>
-    </header>
+                <div class="row">
+                    <div class="col-md-10 col-lg-8 col-xl-7 mx-auto pt-3 pb-3">
 
-   <!-- Pagination grid -->
-    <section class="pagination">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto mt-3">
+                        <ul class="pagination">
 
-                    <ul class="pagination">
+                            <button class="page-item" :disabled ="previous" @click="loadpreviouspage">Previous</button>
+                            <button class="page-item" :disabled ="next" @click="loadnextpage">Next</button>
+                            <label class="checkbox-inline form-group-lg ml-2">
+                                <input type="checkbox" id="checkbox" v-model="checked" class="pt-1 pb-1">Search author
+                            </label>
 
-                        <button class="page-item" :disabled ="previous" @click="loadpreviouspage">Previous</button>
-                        <button class="page-item" :disabled ="next" @click="loadnextpage">Next</button>
-                        <input type="checkbox" id="checkbox" v-model="checked">
-                        <label for="checkbox">Search author</label>
-                    </ul>
+                        </ul>
 
-                </div>
+                    </div>
             </div>
         </div>
-    </section>
-
+    </header>
     <!-- Book Grid -->
         <!-- Book Grid -->
-        <section class="pagination">
+        <section class="books">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
@@ -57,7 +52,7 @@
                             <div class="row row-eq-height">
                                 <div class="col-lg-3 col-md-3 col-sm-3 mt-3 mb-3" v-for="book in books">
                                     <div>
-                                        <img :src="book.volumeInfo.imageLinks.smallThumbnail" alt="">
+                                        <a :href="'/books/'+ book.id"><img :src="book.volumeInfo.imageLinks.smallThumbnail" :alt="book.title"></a>
                                     </div>
                                 </div>
                             </div>
@@ -94,7 +89,7 @@
 
         methods:{
             setData(data){
-                this.books=data.items.filter(item=>item.volumeInfo.imageLinks.smallThumbnail !='undefined');
+                this.books=data.items.filter(item=> _.has(item,'volumeInfo.imageLinks.smallThumbnail','id','selfLink'));
                 this.totalitems=data.totalItems;
                 (this.totalitems-this.startIndex>=this.maxResults)?this.next=false:this.next=true;
                 (this.startIndex-this.maxResults>=0)?this.previous=false:this.previous=true;
@@ -125,7 +120,7 @@
                     this.setData(data);
                 }).catch(error => {
                     this.error=true;
-                    console.log(error.response);
+                    console.log(error);
                 });
             }
         },
@@ -136,3 +131,11 @@
         }
     }
 </script>
+<style>
+    .backgroundpic{
+        background: #DCE35B;  /* fallback for old browsers */
+        background: -webkit-linear-gradient(to right, #45B649, #DCE35B);  /* Chrome 10-25, Safari 5.1-6 */
+        background: linear-gradient(to right, #45B649, #DCE35B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    }
+</style>
