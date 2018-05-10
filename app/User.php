@@ -26,4 +26,10 @@ class User extends Authenticatable
     protected $hidden = [
         'password', 'remember_token',
     ];
+
+    /*a user can have many books*/
+    public function books()
+    {
+        return $this->hasMany(Book::class, 'user_id');
+    }
 }

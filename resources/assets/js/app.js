@@ -15,7 +15,7 @@ window.Vue = require('vue');
  */
 
 Vue.component('book-component', require('./components/BookComponent.vue'));
-
+Vue.component('singlebook-component', require('./components/SingleBookComponent.vue'));
 const app = new Vue({
     el: '#app'
 });

@@ -58,7 +58,7 @@
                             </div>
                         </div>
                         <div v-else-if="error">
-                            <h1 class="text-danger text-center">Api failed to provide us sources of knowledge! Wait few seconds and then try again!</h1>
+                            <h1 class="text-danger text-center">Api failed to provide us the data we want !! Wait few seconds and then try again!</h1>
                         </div>
                     </div>
                 </div>
@@ -131,11 +131,3 @@
         }
     }
 </script>
-<style>
-    .backgroundpic{
-        background: #DCE35B;  /* fallback for old browsers */
-        background: -webkit-linear-gradient(to right, #45B649, #DCE35B);  /* Chrome 10-25, Safari 5.1-6 */
-        background: linear-gradient(to right, #45B649, #DCE35B); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-
-    }
-</style>
