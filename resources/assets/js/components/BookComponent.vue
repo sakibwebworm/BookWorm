@@ -1,4 +1,6 @@
-<template><div>
+<template>
+    <div>
+
     <header class="masthead text-white text-center">
         <div class="overlay"></div>
         <div class="container">
@@ -10,7 +12,10 @@
                     <form>
                         <div class="form-row">
                             <div class="col-12 col-md-9 mb-2 mb-md-0">
-                                <input type="text" class="form-control form-control-lg" placeholder="Search book or authors...">
+                                <input type="text" class="form-control form-control-lg" placeholder="Search..." v-model="search">
+                            </div>
+                            <div class="col-12 col-md-3">
+                                <button  class="btn btn-block btn-lg btn-primary" v-on:click="searchapi">Search!</button>
                             </div>
                         </div>
                     </form>
@@ -19,78 +24,51 @@
         </div>
     </header>
 
-    <!-- Book Grid -->
-    <section class="features-icons bg-light text-center">
+   <!-- Pagination grid -->
+    <section class="pagination">
         <div class="container">
+            <div class="row">
+                <div class="col-md-10 col-lg-8 col-xl-7 mx-auto mt-3">
 
-            <h1 class="my-4 text-center text-lg-center">Search Result</h1>
+                    <ul class="pagination">
 
-            <div class="row text-center text-lg-left">
+                        <button class="page-item" :disabled ="previous" @click="loadpreviouspage">Previous</button>
+                        <button class="page-item" :disabled ="next" @click="loadnextpage">Next</button>
+                        <input type="checkbox" id="checkbox" v-model="checked">
+                        <label for="checkbox">Search author</label>
+                    </ul>
 
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
-                </div>
-                <div class="col-lg-3 col-md-4 col-xs-6">
-                    <a href="#" class="d-block mb-4 h-100">
-                        <img class="img-fluid img-thumbnail" src="http://placehold.it/400x300" alt="">
-                    </a>
                 </div>
             </div>
-
         </div>
     </section>
+
+    <!-- Book Grid -->
+        <!-- Book Grid -->
+        <section class="pagination">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 mx-auto">
+                        <div v-if="books.length==0 && !error">
+                            <h1 class="text-primary text-center">Your search result will appear here!</h1>
+                        </div>
+                        <div v-else-if="!error">
+                            <h1 class="text-success text-center">Your search result</h1>
+                            <div class="row row-eq-height">
+                                <div class="col-lg-3 col-md-3 col-sm-3 mt-3 mb-3" v-for="book in books">
+                                    <div>
+                                        <img :src="book.volumeInfo.imageLinks.smallThumbnail" alt="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div v-else-if="error">
+                            <h1 class="text-danger text-center">Api failed to provide us sources of knowledge! Wait few seconds and then try again!</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 </div>
 </template>
 
@@ -101,10 +79,60 @@
 
         data(){
             return {
-                books:[]
+                books:[],
+                search:'',
+                totalitems:0,
+                startIndex:0,
+                maxResults:40,
+                previous:true,
+                error:false,
+                next:true,
+                checked:false
             }
 
-        }
+        },
 
+        methods:{
+            setData(data){
+                this.books=data.items.filter(item=>item.volumeInfo.imageLinks.smallThumbnail !='undefined');
+                this.totalitems=data.totalItems;
+                (this.totalitems-this.startIndex>=this.maxResults)?this.next=false:this.next=true;
+                (this.startIndex-this.maxResults>=0)?this.previous=false:this.previous=true;
+                this.error=false;
+            },
+            loadnextpage(){
+                this.startIndex +=40;
+                axios.get('https://www.googleapis.com/books/v1/volumes', {params: {q: this.searchquery,startIndex:this.startIndex,maxResults:this.maxResults}}).then(({data})=>{
+                    this.setData(data);
+                }).catch(error => {
+                    this.error=true;
+                    console.log(error.response);
+                });
+            },
+            loadpreviouspage(){
+                this.startIndex -=40;
+                axios.get('https://www.googleapis.com/books/v1/volumes', {params: {q: this.searchquery,startIndex:this.startIndex,maxResults:this.maxResults}}).then(({data})=>{
+                    this.setData(data);
+                }).catch(error => {
+                    this.error=true;
+                    console.log(error.response);
+                });
+            },
+            searchapi(e){
+                e.preventDefault();
+                this.startIndex=0;
+                axios.get('https://www.googleapis.com/books/v1/volumes', {params: {q: this.searchquery,startIndex:this.startIndex,maxResults:this.maxResults}}).then(({data})=>{
+                    this.setData(data);
+                }).catch(error => {
+                    this.error=true;
+                    console.log(error.response);
+                });
+            }
+        },
+        computed: {
+        searchquery(){
+        return (this.checked)?this.search.concat(" inauthor"):this.search.concat(" intitle");
+        }
+        }
     }
 </script>

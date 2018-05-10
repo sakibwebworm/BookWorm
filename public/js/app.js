@@ -13872,9 +13872,8 @@ module.exports = __webpack_require__(43);
 
 /***/ }),
 /* 12 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
 /**
  * First we will load all of this project's JavaScript dependencies which
  * includes Vue and other libraries. It is a great starting point when
@@ -13891,7 +13890,7 @@ window.Vue = __webpack_require__(36);
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('book-component', __webpack_require__(55));
+Vue.component('book-component', __webpack_require__(39));
 
 var app = new Vue({
   el: '#app'
@@ -47150,7 +47149,53 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(6)))
 
 /***/ }),
-/* 39 */,
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+var normalizeComponent = __webpack_require__(40)
+/* script */
+var __vue_script__ = __webpack_require__(41)
+/* template */
+var __vue_template__ = __webpack_require__(42)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\BookComponent.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-731fe02d", Component.options)
+  } else {
+    hotAPI.reload("data-v-731fe02d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
 /* 40 */
 /***/ (function(module, exports) {
 
@@ -47260,99 +47305,11 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 41 */,
-/* 42 */,
-/* 43 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 44 */,
-/* 45 */,
-/* 46 */,
-/* 47 */,
-/* 48 */,
-/* 49 */,
-/* 50 */,
-/* 51 */,
-/* 52 */,
-/* 53 */,
-/* 54 */,
-/* 55 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-var normalizeComponent = __webpack_require__(40)
-/* script */
-var __vue_script__ = __webpack_require__(56)
-/* template */
-var __vue_template__ = __webpack_require__(57)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = null
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources\\assets\\js\\components\\BookComponent.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-731fe02d", Component.options)
-  } else {
-    hotAPI.reload("data-v-731fe02d", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 56 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -47432,223 +47389,278 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
         return {
-            books: []
+            books: [],
+            search: '',
+            totalitems: 0,
+            startIndex: 0,
+            maxResults: 40,
+            previous: true,
+            error: false,
+            next: true,
+            checked: false
         };
+    },
+
+
+    methods: {
+        setData: function setData(data) {
+            this.books = data.items.filter(function (item) {
+                return item.volumeInfo.imageLinks.smallThumbnail != 'undefined';
+            });
+            this.totalitems = data.totalItems;
+            this.totalitems - this.startIndex >= this.maxResults ? this.next = false : this.next = true;
+            this.startIndex - this.maxResults >= 0 ? this.previous = false : this.previous = true;
+            this.error = false;
+        },
+        loadnextpage: function loadnextpage() {
+            var _this = this;
+
+            this.startIndex += 40;
+            axios.get('https://www.googleapis.com/books/v1/volumes', { params: { q: this.searchquery, startIndex: this.startIndex, maxResults: this.maxResults } }).then(function (_ref) {
+                var data = _ref.data;
+
+                _this.setData(data);
+            }).catch(function (error) {
+                _this.error = true;
+                console.log(error.response);
+            });
+        },
+        loadpreviouspage: function loadpreviouspage() {
+            var _this2 = this;
+
+            this.startIndex -= 40;
+            axios.get('https://www.googleapis.com/books/v1/volumes', { params: { q: this.searchquery, startIndex: this.startIndex, maxResults: this.maxResults } }).then(function (_ref2) {
+                var data = _ref2.data;
+
+                _this2.setData(data);
+            }).catch(function (error) {
+                _this2.error = true;
+                console.log(error.response);
+            });
+        },
+        searchapi: function searchapi(e) {
+            var _this3 = this;
+
+            e.preventDefault();
+            this.startIndex = 0;
+            axios.get('https://www.googleapis.com/books/v1/volumes', { params: { q: this.searchquery, startIndex: this.startIndex, maxResults: this.maxResults } }).then(function (_ref3) {
+                var data = _ref3.data;
+
+                _this3.setData(data);
+            }).catch(function (error) {
+                _this3.error = true;
+                console.log(error.response);
+            });
+        }
+    },
+    computed: {
+        searchquery: function searchquery() {
+            return this.checked ? this.search.concat(" inauthor") : this.search.concat(" intitle");
+        }
     }
 });
 
 /***/ }),
-/* 57 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _vm._m(0)
+  return _c("div", [
+    _c("header", { staticClass: "masthead text-white text-center" }, [
+      _c("div", { staticClass: "overlay" }),
+      _vm._v(" "),
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _vm._m(0),
+          _vm._v(" "),
+          _c("div", { staticClass: "col-md-10 col-lg-8 col-xl-7 mx-auto" }, [
+            _c("form", [
+              _c("div", { staticClass: "form-row" }, [
+                _c("div", { staticClass: "col-12 col-md-9 mb-2 mb-md-0" }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.search,
+                        expression: "search"
+                      }
+                    ],
+                    staticClass: "form-control form-control-lg",
+                    attrs: { type: "text", placeholder: "Search..." },
+                    domProps: { value: _vm.search },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.search = $event.target.value
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-12 col-md-3" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-block btn-lg btn-primary",
+                      on: { click: _vm.searchapi }
+                    },
+                    [_vm._v("Search!")]
+                  )
+                ])
+              ])
+            ])
+          ])
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "pagination" }, [
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c(
+            "div",
+            { staticClass: "col-md-10 col-lg-8 col-xl-7 mx-auto mt-3" },
+            [
+              _c("ul", { staticClass: "pagination" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "page-item",
+                    attrs: { disabled: _vm.previous },
+                    on: { click: _vm.loadpreviouspage }
+                  },
+                  [_vm._v("Previous")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "page-item",
+                    attrs: { disabled: _vm.next },
+                    on: { click: _vm.loadnextpage }
+                  },
+                  [_vm._v("Next")]
+                ),
+                _vm._v(" "),
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.checked,
+                      expression: "checked"
+                    }
+                  ],
+                  attrs: { type: "checkbox", id: "checkbox" },
+                  domProps: {
+                    checked: Array.isArray(_vm.checked)
+                      ? _vm._i(_vm.checked, null) > -1
+                      : _vm.checked
+                  },
+                  on: {
+                    change: function($event) {
+                      var $$a = _vm.checked,
+                        $$el = $event.target,
+                        $$c = $$el.checked ? true : false
+                      if (Array.isArray($$a)) {
+                        var $$v = null,
+                          $$i = _vm._i($$a, $$v)
+                        if ($$el.checked) {
+                          $$i < 0 && (_vm.checked = $$a.concat([$$v]))
+                        } else {
+                          $$i > -1 &&
+                            (_vm.checked = $$a
+                              .slice(0, $$i)
+                              .concat($$a.slice($$i + 1)))
+                        }
+                      } else {
+                        _vm.checked = $$c
+                      }
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c("label", { attrs: { for: "checkbox" } }, [
+                  _vm._v("Search author")
+                ])
+              ])
+            ]
+          )
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "pagination" }, [
+      _c("div", { staticClass: "container" }, [
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col-lg-12 col-md-12 col-sm-12 mx-auto" }, [
+            _vm.books.length == 0 && !_vm.error
+              ? _c("div", [
+                  _c("h1", { staticClass: "text-primary text-center" }, [
+                    _vm._v("Your search result will appear here!")
+                  ])
+                ])
+              : !_vm.error
+                ? _c("div", [
+                    _c("h1", { staticClass: "text-success text-center" }, [
+                      _vm._v("Your search result")
+                    ]),
+                    _vm._v(" "),
+                    _c(
+                      "div",
+                      { staticClass: "row row-eq-height" },
+                      _vm._l(_vm.books, function(book) {
+                        return _c(
+                          "div",
+                          {
+                            staticClass: "col-lg-3 col-md-3 col-sm-3 mt-3 mb-3"
+                          },
+                          [
+                            _c("div", [
+                              _c("img", {
+                                attrs: {
+                                  src:
+                                    book.volumeInfo.imageLinks.smallThumbnail,
+                                  alt: ""
+                                }
+                              })
+                            ])
+                          ]
+                        )
+                      })
+                    )
+                  ])
+                : _vm.error
+                  ? _c("div", [
+                      _c("h1", { staticClass: "text-danger text-center" }, [
+                        _vm._v(
+                          "Api failed to provide us sources of knowledge! Wait few seconds and then try again!"
+                        )
+                      ])
+                    ])
+                  : _vm._e()
+          ])
+        ])
+      ])
+    ])
+  ])
 }
 var staticRenderFns = [
   function() {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", [
-      _c("header", { staticClass: "masthead text-white text-center" }, [
-        _c("div", { staticClass: "overlay" }),
-        _vm._v(" "),
-        _c("div", { staticClass: "container" }, [
-          _c("div", { staticClass: "row" }, [
-            _c("div", { staticClass: "col-xl-9 mx-auto" }, [
-              _c("h1", { staticClass: "mb-5" }, [
-                _vm._v(
-                  "Build a landing page for your business or project and generate more leads!"
-                )
-              ])
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-md-10 col-lg-8 col-xl-7 mx-auto" }, [
-              _c("form", [
-                _c("div", { staticClass: "form-row" }, [
-                  _c("div", { staticClass: "col-12 col-md-9 mb-2 mb-md-0" }, [
-                    _c("input", {
-                      staticClass: "form-control form-control-lg",
-                      attrs: {
-                        type: "text",
-                        placeholder: "Search book or authors..."
-                      }
-                    })
-                  ])
-                ])
-              ])
-            ])
-          ])
-        ])
-      ]),
-      _vm._v(" "),
-      _c("section", { staticClass: "features-icons bg-light text-center" }, [
-        _c("div", { staticClass: "container" }, [
-          _c("h1", { staticClass: "my-4 text-center text-lg-center" }, [
-            _vm._v("Search Result")
-          ]),
-          _vm._v(" "),
-          _c("div", { staticClass: "row text-center text-lg-left" }, [
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ]),
-            _vm._v(" "),
-            _c("div", { staticClass: "col-lg-3 col-md-4 col-xs-6" }, [
-              _c(
-                "a",
-                { staticClass: "d-block mb-4 h-100", attrs: { href: "#" } },
-                [
-                  _c("img", {
-                    staticClass: "img-fluid img-thumbnail",
-                    attrs: { src: "http://placehold.it/400x300", alt: "" }
-                  })
-                ]
-              )
-            ])
-          ])
-        ])
+    return _c("div", { staticClass: "col-xl-9 mx-auto" }, [
+      _c("h1", { staticClass: "mb-5" }, [
+        _vm._v(
+          "Build a landing page for your business or project and generate more leads!"
+        )
       ])
     ])
   }
@@ -47661,6 +47673,12 @@ if (false) {
     require("vue-hot-reload-api")      .rerender("data-v-731fe02d", module.exports)
   }
 }
+
+/***/ }),
+/* 43 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
 
 /***/ })
 /******/ ]);

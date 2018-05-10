@@ -21,7 +21,7 @@
 
     <!-- Custom styles for this template -->
     <link href="/css/landing-page.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="/css/vue2-animate.min.css">
 </head>
 
 <body>
