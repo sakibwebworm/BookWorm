@@ -15,13 +15,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <!-- Custom fonts for this template -->
-    <link href="/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="/vendor/simple-line-icons/css/simple-line-icons.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- Custom styles for this template -->
     <link href="/css/landing-page.css" rel="stylesheet">
-    <link rel="stylesheet" href="/css/vue2-animate.min.css">
 </head>
 
 <body>
@@ -46,23 +43,15 @@
 </nav>
 
 @yield('content')
-<!-- Footer -->
-<footer class="footer bg-light">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-12 h-100 text-center text-lg-left my-auto">
-                <h3 class="text-muted small mb-4 mb-lg-0 text-center">&copy; BookWorm 2018. All Rights Reserved.</h3>
-            </div>
-        </div>
-    </div>
-</footer>
 @if(auth::check())
     <form id="logout-form" action="/logout" method="POST" style="display: none;">@csrf</form>
     @endif
+
+@yield('pageRelatedjs')
 <!-- Bootstrap core JavaScript -->
-<script src="/vendor/jquery/jquery.min.js"></script>
 <script src="/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="/js/app.js"></script>
+
+
 
 </body>
 

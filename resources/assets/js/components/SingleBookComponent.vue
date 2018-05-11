@@ -43,7 +43,7 @@
         },
         created(){
             axios.get(this.searchquery).then(({data})=>{
-                this.book=data.volumeInfo;
+                this.book=data;
             }).catch(error => {
                 this.error=true;
                 console.log(error);

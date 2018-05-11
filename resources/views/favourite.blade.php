@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-9 mx-auto">
-                    <h1 class="mb-5">A curated list of books which is important!!</h1>
+                    <h1 class="mb-5">A curated list of books!!</h1>
                 </div>
             </div>
         </div>
@@ -31,4 +31,6 @@
 
 @endsection
 
-
+@section('pageRelatedjs')
+    <script src="/vendor/jquery/jquery.min.js"></script>
+@endsection
