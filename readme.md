@@ -11,5 +11,10 @@ cp .env.example .env
 php artisan key:generate
 
 
+##Migrate the database 
+
+php artisan migrate
+
+
 ## So ..
 Enjoy!
