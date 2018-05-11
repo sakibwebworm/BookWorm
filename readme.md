@@ -10,8 +10,7 @@ cp .env.example .env
 
 php artisan key:generate
 
-
-##Migrate the database 
+## Migrate the datatabase 
 
 php artisan migrate
 
