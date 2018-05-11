@@ -48186,7 +48186,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             if (this.saved == 'Save') {
                 axios.post('/books', {
                     identifier: this.id,
-                    picture: this.book.imageLinks.thumbnail
+                    picture: this.book.volumeInfo.imageLinks.thumbnail
                 }).then(function (_ref2) {
                     var data = _ref2.data;
 

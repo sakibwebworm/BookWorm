@@ -25,7 +25,7 @@ class SaveBookRequest extends FormRequest
     {
         return [
             //
-            'identifier'=>'required|unique:books|max:255',
+            'identifier'=>'required',
             'picture'=>'required'
         ];
     }

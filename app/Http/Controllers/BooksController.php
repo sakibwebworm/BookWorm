@@ -13,7 +13,7 @@ class BooksController extends Controller
     /*Middleware to restrict user to access to auth only pages*/
     public function __construct()
     {
-        $this->middleware('auth', ['except' => ['index','show']]);
+        $this->middleware('auth', ['except' => ['show']]);
     }
 
     /**
@@ -24,7 +24,8 @@ class BooksController extends Controller
     public function index()
     {
         //
-        $Books=Book::all();
+        $user=User::find(Auth::user()->id);
+        $Books=$user->books->all();
         return view('favourite',compact('Books'));
     }
 

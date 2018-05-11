@@ -59,7 +59,7 @@
                 if(this.saved=='Save') {
                     axios.post('/books', {
                         identifier: this.id,
-                        picture: this.book.imageLinks.thumbnail
+                        picture: this.book.volumeInfo.imageLinks.thumbnail
                     }).then(({data}) => {
                         this.saved = 'Delete';
                         this.message=data;
