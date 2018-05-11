@@ -11,9 +11,9 @@
                        <strong>{{message}}</strong>
                    </div>
                    <div class="col-lg-12 col-md-12 col-sm-12" v-if="!error">
-                       <img :src="book.imageLinks.thumbnail">
-                       <h1 >{{book.title}}</h1>
-                       <p >{{book.description}}</p>
+                       <img :src="book.volumeInfo.imageLinks.thumbnail">
+                       <h1 >{{book.volumeInfo.title}}</h1>
+                       <p >{{book.volumeInfo.description}}</p>
                        <div>
                            <button class="btn-danger" @click="savebookordelete">{{this.saved}}</button>
                        </div>

@@ -48275,11 +48275,13 @@ var render = function() {
             _vm._v(" "),
             !_vm.error
               ? _c("div", { staticClass: "col-lg-12 col-md-12 col-sm-12" }, [
-                  _c("img", { attrs: { src: _vm.book.imageLinks.thumbnail } }),
+                  _c("img", {
+                    attrs: { src: _vm.book.volumeInfo.imageLinks.thumbnail }
+                  }),
                   _vm._v(" "),
-                  _c("h1", [_vm._v(_vm._s(_vm.book.title))]),
+                  _c("h1", [_vm._v(_vm._s(_vm.book.volumeInfo.title))]),
                   _vm._v(" "),
-                  _c("p", [_vm._v(_vm._s(_vm.book.description))]),
+                  _c("p", [_vm._v(_vm._s(_vm.book.volumeInfo.description))]),
                   _vm._v(" "),
                   _c("div", [
                     _c(
